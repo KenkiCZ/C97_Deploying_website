@@ -11,11 +11,13 @@ from functools import wraps
 from werkzeug.security import generate_password_hash
 from forms import *
 from typing import List
+import os
+from dotenv import load_dotenv
 
 
-
+load_dotenv()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'bc26d388cb92dc12ef5aca09e9487f0bfd5a6a7aa778a97a11ebf6c3555d544c'
+app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
 ckeditor = CKEditor(app)
 Bootstrap5(app)
 login_manager = LoginManager()
@@ -31,7 +33,7 @@ gravatar = Gravatar(app,
 # CREATE DATABASE
 class Base(DeclarativeBase):
     pass
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI")
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
@@ -247,4 +249,4 @@ def contact():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5000)
